@@ -395,3 +395,10 @@ func (b *Box) HasFocus() bool {
 func (b *Box) GetFocusable() Focusable {
 	return b.focus
 }
+
+// SetFocusable sets the item's Focusable.
+// Should only be used when creating a new type.
+func (b *Box) SetFocusable(focus Focusable) *Box {
+	b.focus = focus
+	return b
+}
