@@ -49,7 +49,7 @@ func NewModal() *Modal {
 	m.frame.SetBorder(true).
 		SetBackgroundColor(Styles.ContrastBackgroundColor).
 		SetBorderPadding(1, 1, 1, 1)
-	m.focus = m
+	m.Self = m
 	return m
 }
 
@@ -182,7 +182,7 @@ func (m *Modal) MouseHandler() func(action MouseAction, event *tcell.EventMouse,
 		// Pass mouse events on to the form.
 		consumed, capture = m.form.MouseHandler()(action, event, setFocus)
 		if !consumed && action == MouseLeftClick && m.InRect(event.Position()) {
-			setFocus(m)
+			setFocus(m.Self)
 			consumed = true
 		}
 		return

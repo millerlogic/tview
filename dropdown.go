@@ -103,7 +103,7 @@ func NewDropDown() *DropDown {
 		prefixTextColor:      Styles.ContrastSecondaryTextColor,
 	}
 
-	d.focus = d
+	d.Self = d
 
 	return d
 }
@@ -340,7 +340,7 @@ func (d *DropDown) Draw(screen tcell.Screen) {
 		fieldWidth = rightLimit - x
 	}
 	fieldStyle := tcell.StyleDefault.Background(d.fieldBackgroundColor)
-	if d.GetFocusable().HasFocus() && !d.open {
+	if d.Self.HasFocus() && !d.open {
 		fieldStyle = fieldStyle.Background(d.fieldTextColor)
 	}
 	for index := 0; index < fieldWidth; index++ {
@@ -365,14 +365,14 @@ func (d *DropDown) Draw(screen tcell.Screen) {
 			text = d.currentOptionPrefix + d.options[d.currentOption].Text + d.currentOptionSuffix
 		}
 		// Just show the current selection.
-		if d.GetFocusable().HasFocus() && !d.open {
+		if d.Self.HasFocus() && !d.open {
 			color = d.fieldBackgroundColor
 		}
 		Print(screen, text, x, y, fieldWidth, AlignLeft, color)
 	}
 
 	// Draw options list.
-	if d.HasFocus() && d.open {
+	if d.Self.HasFocus() && d.open {
 		// We prefer to drop down but if there is no space, maybe drop up?
 		lx := x
 		ly := y + 1
@@ -484,7 +484,7 @@ func (d *DropDown) openList(setFocus func(Primitive)) {
 func (d *DropDown) closeList(setFocus func(Primitive)) {
 	d.open = false
 	if d.list.HasFocus() {
-		setFocus(d)
+		setFocus(d.Self)
 	}
 }
 

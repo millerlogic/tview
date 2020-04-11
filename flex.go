@@ -53,7 +53,7 @@ func NewFlex() *Flex {
 		Box:       NewBox().SetBackgroundColor(tcell.ColorDefault),
 		direction: FlexColumn,
 	}
-	f.focus = f
+	f.Self = f
 	return f
 }
 
@@ -173,7 +173,7 @@ func (f *Flex) Draw(screen tcell.Screen) {
 		pos += size
 
 		if item.Item != nil {
-			if item.Item.GetFocusable().HasFocus() {
+			if item.Item.HasFocus() {
 				defer item.Item.Draw(screen)
 			} else {
 				item.Item.Draw(screen)
@@ -195,7 +195,7 @@ func (f *Flex) Focus(delegate func(p Primitive)) {
 // HasFocus returns whether or not this primitive has focus.
 func (f *Flex) HasFocus() bool {
 	for _, item := range f.items {
-		if item.Item != nil && item.Item.GetFocusable().HasFocus() {
+		if item.Item != nil && item.Item.HasFocus() {
 			return true
 		}
 	}

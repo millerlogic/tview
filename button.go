@@ -34,13 +34,15 @@ type Button struct {
 func NewButton(label string) *Button {
 	box := NewBox().SetBackgroundColor(Styles.ContrastBackgroundColor)
 	box.SetRect(0, 0, TaggedStringWidth(label)+4, 1)
-	return &Button{
+	b := &Button{
 		Box:                      box,
 		label:                    label,
 		labelColor:               Styles.PrimaryTextColor,
 		labelColorActivated:      Styles.InverseTextColor,
 		backgroundColorActivated: Styles.PrimaryTextColor,
 	}
+	b.Self = b
+	return b
 }
 
 // SetLabel sets the button text.
@@ -97,7 +99,7 @@ func (b *Button) Draw(screen tcell.Screen) {
 	// Draw the box.
 	borderColor := b.borderColor
 	backgroundColor := b.backgroundColor
-	if b.focus.HasFocus() {
+	if b.Self.HasFocus() {
 		b.backgroundColor = b.backgroundColorActivated
 		b.borderColor = b.labelColorActivated
 		defer func() {
@@ -112,7 +114,7 @@ func (b *Button) Draw(screen tcell.Screen) {
 	if width > 0 && height > 0 {
 		y = y + height/2
 		labelColor := b.labelColor
-		if b.focus.HasFocus() {
+		if b.Self.HasFocus() {
 			labelColor = b.labelColorActivated
 		}
 		Print(screen, b.label, x, y, width, AlignCenter, labelColor)
@@ -145,7 +147,7 @@ func (b *Button) MouseHandler() func(action MouseAction, event *tcell.EventMouse
 
 		// Process mouse event.
 		if action == MouseLeftClick {
-			setFocus(b)
+			setFocus(b.Self)
 			if b.selected != nil {
 				b.selected()
 			}

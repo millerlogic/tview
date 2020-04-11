@@ -45,7 +45,7 @@ func NewFrame(primitive Primitive) *Frame {
 		right:     1,
 	}
 
-	f.focus = f
+	f.Self = f
 
 	return f
 }
@@ -149,11 +149,7 @@ func (f *Frame) Focus(delegate func(p Primitive)) {
 
 // HasFocus returns whether or not this primitive has focus.
 func (f *Frame) HasFocus() bool {
-	focusable, ok := f.primitive.(Focusable)
-	if ok {
-		return focusable.HasFocus()
-	}
-	return false
+	return f.primitive.HasFocus()
 }
 
 // MouseHandler returns the mouse handler for this primitive.

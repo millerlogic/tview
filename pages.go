@@ -37,7 +37,7 @@ func NewPages() *Pages {
 	p := &Pages{
 		Box: NewBox(),
 	}
-	p.focus = p
+	p.Self = p
 	return p
 }
 
@@ -63,7 +63,7 @@ func (p *Pages) GetPageCount() int {
 // primitive will be set to the size available to the Pages primitive whenever
 // the pages are drawn.
 func (p *Pages) AddPage(name string, item Primitive, resize, visible bool) *Pages {
-	hasFocus := p.HasFocus()
+	hasFocus := p.Self.HasFocus()
 	for index, pg := range p.pages {
 		if pg.Name == name {
 			p.pages = append(p.pages[:index], p.pages[index+1:]...)
@@ -75,7 +75,7 @@ func (p *Pages) AddPage(name string, item Primitive, resize, visible bool) *Page
 		p.changed()
 	}
 	if hasFocus {
-		p.Focus(p.setFocus)
+		p.Self.Focus(p.setFocus)
 	}
 	return p
 }
@@ -92,7 +92,7 @@ func (p *Pages) AddAndSwitchToPage(name string, item Primitive, resize bool) *Pa
 // visible page, visibility is assigned to the last page.
 func (p *Pages) RemovePage(name string) *Pages {
 	var isVisible bool
-	hasFocus := p.HasFocus()
+	hasFocus := p.Self.HasFocus()
 	for index, page := range p.pages {
 		if page.Name == name {
 			isVisible = page.Visible
@@ -115,7 +115,7 @@ func (p *Pages) RemovePage(name string) *Pages {
 		}
 	}
 	if hasFocus {
-		p.Focus(p.setFocus)
+		p.Self.Focus(p.setFocus)
 	}
 	return p
 }
@@ -142,8 +142,8 @@ func (p *Pages) ShowPage(name string) *Pages {
 			break
 		}
 	}
-	if p.HasFocus() {
-		p.Focus(p.setFocus)
+	if p.Self.HasFocus() {
+		p.Self.Focus(p.setFocus)
 	}
 	return p
 }
@@ -159,8 +159,8 @@ func (p *Pages) HidePage(name string) *Pages {
 			break
 		}
 	}
-	if p.HasFocus() {
-		p.Focus(p.setFocus)
+	if p.Self.HasFocus() {
+		p.Self.Focus(p.setFocus)
 	}
 	return p
 }
@@ -178,8 +178,8 @@ func (p *Pages) SwitchToPage(name string) *Pages {
 	if p.changed != nil {
 		p.changed()
 	}
-	if p.HasFocus() {
-		p.Focus(p.setFocus)
+	if p.Self.HasFocus() {
+		p.Self.Focus(p.setFocus)
 	}
 	return p
 }
@@ -199,8 +199,8 @@ func (p *Pages) SendToFront(name string) *Pages {
 			break
 		}
 	}
-	if p.HasFocus() {
-		p.Focus(p.setFocus)
+	if p.Self.HasFocus() {
+		p.Self.Focus(p.setFocus)
 	}
 	return p
 }
@@ -220,8 +220,8 @@ func (p *Pages) SendToBack(name string) *Pages {
 			break
 		}
 	}
-	if p.HasFocus() {
-		p.Focus(p.setFocus)
+	if p.Self.HasFocus() {
+		p.Self.Focus(p.setFocus)
 	}
 	return p
 }
@@ -240,7 +240,7 @@ func (p *Pages) GetFrontPage() (name string, item Primitive) {
 // HasFocus returns whether or not this primitive has focus.
 func (p *Pages) HasFocus() bool {
 	for _, page := range p.pages {
-		if page.Item.GetFocusable().HasFocus() {
+		if page.Item.HasFocus() {
 			return true
 		}
 	}

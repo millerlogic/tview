@@ -195,7 +195,7 @@ type TextView struct {
 
 // NewTextView returns a new text view.
 func NewTextView() *TextView {
-	return &TextView{
+	t := &TextView{
 		Box:           NewBox(),
 		highlights:    make(map[string]struct{}),
 		lineOffset:    -1,
@@ -206,6 +206,8 @@ func NewTextView() *TextView {
 		regions:       false,
 		dynamicColors: false,
 	}
+	t.Self = t
+	return t
 }
 
 // SetScrollable sets the flag that decides whether or not the text view is
@@ -1167,7 +1169,7 @@ func (t *TextView) MouseHandler() func(action MouseAction, event *tcell.EventMou
 				}
 			}
 			consumed = true
-			setFocus(t)
+			setFocus(t.Self)
 		case MouseScrollUp:
 			t.trackEnd = false
 			t.lineOffset--
