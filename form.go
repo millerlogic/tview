@@ -96,7 +96,7 @@ func NewForm() *Form {
 		buttonTextColor:       Styles.PrimaryTextColor,
 	}
 
-	f.focus = f
+	f.Self = f
 
 	return f
 }
@@ -430,7 +430,7 @@ func (f *Form) Draw(screen tcell.Screen) {
 		positions[index].y = y
 		positions[index].width = itemWidth
 		positions[index].height = 1
-		if item.GetFocusable().HasFocus() {
+		if item.HasFocus() {
 			focusedPosition = positions[index]
 		}
 
@@ -524,7 +524,7 @@ func (f *Form) Draw(screen tcell.Screen) {
 		}
 
 		// Draw items with focus last (in case of overlaps).
-		if item.GetFocusable().HasFocus() {
+		if item.HasFocus() {
 			defer item.Draw(screen)
 		} else {
 			item.Draw(screen)
@@ -608,12 +608,12 @@ func (f *Form) HasFocus() bool {
 // has focus.
 func (f *Form) focusIndex() int {
 	for index, item := range f.items {
-		if item.GetFocusable().HasFocus() {
+		if item.HasFocus() {
 			return index
 		}
 	}
 	for index, button := range f.buttons {
-		if button.focus.HasFocus() {
+		if button.HasFocus() {
 			return len(f.items) + index
 		}
 	}

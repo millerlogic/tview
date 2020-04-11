@@ -279,12 +279,14 @@ type Table struct {
 
 // NewTable returns a new table.
 func NewTable() *Table {
-	return &Table{
+	t := &Table{
 		Box:          NewBox(),
 		bordersColor: Styles.GraphicsColor,
 		separator:    ' ',
 		lastColumn:   -1,
 	}
+	t.Self = t
+	return t
 }
 
 // Clear removes all table data.
@@ -1251,7 +1253,7 @@ func (t *Table) MouseHandler() func(action MouseAction, event *tcell.EventMouse,
 				t.Select(t.cellAt(x, y))
 			}
 			consumed = true
-			setFocus(t)
+			setFocus(t.Self)
 		case MouseScrollUp:
 			t.trackEnd = false
 			t.rowOffset--

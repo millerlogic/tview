@@ -71,7 +71,7 @@ type List struct {
 
 // NewList returns a new form.
 func NewList() *List {
-	return &List{
+	l := &List{
 		Box:                     NewBox(),
 		showSecondaryText:       true,
 		wrapAround:              true,
@@ -81,6 +81,8 @@ func NewList() *List {
 		selectedTextColor:       Styles.PrimitiveBackgroundColor,
 		selectedBackgroundColor: Styles.PrimaryTextColor,
 	}
+	l.Self = l
+	return l
 }
 
 // SetCurrentItem sets the currently selected item by its index, starting at 0
@@ -442,7 +444,7 @@ func (l *List) Draw(screen tcell.Screen) {
 		Print(screen, item.MainText, x, y, width, AlignLeft, l.mainTextColor)
 
 		// Background color of selected text.
-		if index == l.currentItem && (!l.selectedFocusOnly || l.HasFocus()) {
+		if index == l.currentItem && (!l.selectedFocusOnly || l.Self.HasFocus()) {
 			textWidth := width
 			if !l.highlightFullLine {
 				if w := TaggedStringWidth(item.MainText); w < textWidth {
@@ -591,7 +593,7 @@ func (l *List) MouseHandler() func(action MouseAction, event *tcell.EventMouse, 
 		// Process mouse event.
 		switch action {
 		case MouseLeftClick:
-			setFocus(l)
+			setFocus(l.Self)
 			index := l.indexAtPoint(event.Position())
 			if index != -1 {
 				item := l.items[index]

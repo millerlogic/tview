@@ -71,7 +71,7 @@ func NewGrid() *Grid {
 		Box:          NewBox().SetBackgroundColor(tcell.ColorDefault),
 		bordersColor: Styles.GraphicsColor,
 	}
-	g.focus = g
+	g.Self = g
 	return g
 }
 
@@ -261,7 +261,7 @@ func (g *Grid) Blur() {
 // HasFocus returns whether or not this primitive has focus.
 func (g *Grid) HasFocus() bool {
 	for _, item := range g.items {
-		if item.visible && item.Item.GetFocusable().HasFocus() {
+		if item.visible && item.Item.HasFocus() {
 			return true
 		}
 	}
@@ -483,7 +483,7 @@ func (g *Grid) Draw(screen tcell.Screen) {
 		}
 		item.x, item.y, item.w, item.h = px, py, pw, ph
 		item.visible = true
-		if primitive.GetFocusable().HasFocus() {
+		if primitive.HasFocus() {
 			focus = item
 		}
 	}

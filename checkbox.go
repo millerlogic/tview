@@ -46,12 +46,14 @@ type Checkbox struct {
 
 // NewCheckbox returns a new input field.
 func NewCheckbox() *Checkbox {
-	return &Checkbox{
+	c := &Checkbox{
 		Box:                  NewBox(),
 		labelColor:           Styles.SecondaryTextColor,
 		fieldBackgroundColor: Styles.ContrastBackgroundColor,
 		fieldTextColor:       Styles.PrimaryTextColor,
 	}
+	c.Self = c
+	return c
 }
 
 // SetChecked sets the state of the checkbox.
@@ -168,7 +170,7 @@ func (c *Checkbox) Draw(screen tcell.Screen) {
 
 	// Draw checkbox.
 	fieldStyle := tcell.StyleDefault.Background(c.fieldBackgroundColor).Foreground(c.fieldTextColor)
-	if c.focus.HasFocus() {
+	if c.Self.HasFocus() {
 		fieldStyle = fieldStyle.Background(c.fieldTextColor).Foreground(c.fieldBackgroundColor)
 	}
 	checkedRune := 'X'

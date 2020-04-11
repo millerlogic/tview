@@ -287,11 +287,13 @@ type TreeView struct {
 
 // NewTreeView returns a new tree view.
 func NewTreeView() *TreeView {
-	return &TreeView{
+	t := &TreeView{
 		Box:           NewBox(),
 		graphics:      true,
 		graphicsColor: Styles.GraphicsColor,
 	}
+	t.Self = t
+	return t
 }
 
 // SetRoot sets the root node of the tree.
@@ -756,7 +758,7 @@ func (t *TreeView) MouseHandler() func(action MouseAction, event *tcell.EventMou
 				}
 			}
 			consumed = true
-			setFocus(t)
+			setFocus(t.Self)
 		case MouseScrollUp:
 			t.movement = treeUp
 			consumed = true

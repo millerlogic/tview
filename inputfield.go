@@ -100,13 +100,15 @@ type InputField struct {
 
 // NewInputField returns a new input field.
 func NewInputField() *InputField {
-	return &InputField{
+	i := &InputField{
 		Box:                  NewBox(),
 		labelColor:           Styles.SecondaryTextColor,
 		fieldBackgroundColor: Styles.ContrastBackgroundColor,
 		fieldTextColor:       Styles.PrimaryTextColor,
 		placeholderTextColor: Styles.ContrastSecondaryTextColor,
 	}
+	i.Self = i
+	return i
 }
 
 // SetText sets the current text of the input field.
@@ -428,7 +430,7 @@ func (i *InputField) Draw(screen tcell.Screen) {
 	}
 
 	// Set cursor.
-	if i.focus.HasFocus() {
+	if i.Self.HasFocus() {
 		screen.ShowCursor(x+cursorScreenPos, y)
 	}
 }
@@ -616,7 +618,7 @@ func (i *InputField) MouseHandler() func(action MouseAction, event *tcell.EventM
 					i.cursorPos = len(i.text)
 				}
 			}
-			setFocus(i)
+			setFocus(i.Self)
 			consumed = true
 		}
 

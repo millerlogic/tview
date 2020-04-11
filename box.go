@@ -14,6 +14,12 @@ import (
 //
 // See https://github.com/rivo/tview/wiki/Box for an example.
 type Box struct {
+	// Self refers to the current primitive.
+	// It should only be used when creating a new primitive type.
+	// Use this when getting and setting focus within the type in order to use
+	// the correct reference.
+	Self Primitive
+
 	// The position of the rect.
 	x, y, width, height int
 
@@ -45,10 +51,6 @@ type Box struct {
 	// The alignment of the title.
 	titleAlign int
 
-	// Provides a way to find out if this box has focus. We always go through
-	// this interface because it may be overridden by implementing classes.
-	focus Focusable
-
 	// Whether or not this box has focus.
 	hasFocus bool
 
@@ -77,7 +79,7 @@ func NewBox() *Box {
 		titleColor:      Styles.TitleColor,
 		titleAlign:      AlignCenter,
 	}
-	b.focus = b
+	b.Self = b
 	return b
 }
 
@@ -342,7 +344,7 @@ func (b *Box) Draw(screen tcell.Screen) {
 	if b.border && b.width >= 2 && b.height >= 2 {
 		border := background.Foreground(b.borderColor) | tcell.Style(b.borderAttributes)
 		var vertical, horizontal, topLeft, topRight, bottomLeft, bottomRight rune
-		if b.focus.HasFocus() {
+		if b.Self.HasFocus() {
 			horizontal = Borders.HorizontalFocus
 			vertical = Borders.VerticalFocus
 			topLeft = Borders.TopLeftFocus
@@ -404,9 +406,4 @@ func (b *Box) Blur() {
 // HasFocus returns whether or not this primitive has focus.
 func (b *Box) HasFocus() bool {
 	return b.hasFocus
-}
-
-// GetFocusable returns the item's Focusable.
-func (b *Box) GetFocusable() Focusable {
-	return b.focus
 }
